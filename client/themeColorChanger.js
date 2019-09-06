@@ -3,6 +3,40 @@
 var idMap = {};
 var theme_COLOR_config;
 
+var isRgb = /rgba?\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})(?:,\s*0?\.(\d+))?\)/;
+
+function generateColorRegex(color) {
+  var rgbGroup = color.match(isRgb);
+  if (rgbGroup) {
+    if (rgbGroup[4]) {
+      return new RegExp(
+        'rgba\\(' +
+          rgbGroup[1] +
+          ',\\s*' +
+          rgbGroup[2] +
+          ',\\s*' +
+          rgbGroup[3] +
+          ',\\s*' +
+          '0?\\.' +
+          rgbGroup[4] +
+          '\\)',
+        'i'
+      );
+    }
+    return new RegExp(
+      'rgb\\(' +
+        rgbGroup[1] +
+        ',\\s*' +
+        rgbGroup[2] +
+        ',\\s*' +
+        rgbGroup[3] +
+        '\\)',
+      'i'
+    );
+  }
+  return new RegExp(color, 'i');
+}
+
 module.exports = {
   changeColor: function(options, promiseForIE) {
     var win = window; // || global
@@ -57,10 +91,7 @@ module.exports = {
   },
   replaceCssText: function(cssText, oldColors, newColors) {
     oldColors.forEach(function(color, t) {
-      cssText = cssText.replace(
-        new RegExp(color.replace(/,/g, ',\\s*'), 'ig'),
-        newColors[t]
-      ); // 255, 255,3
+      cssText = cssText.replace(generateColorRegex(color), newColors[t]);
     });
     return cssText;
   },
