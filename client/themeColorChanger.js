@@ -20,7 +20,7 @@ function generateColorRegex(color) {
           '0?\\.' +
           rgbGroup[4] +
           '\\)',
-        'i'
+        'gi'
       );
     }
     return new RegExp(
@@ -31,10 +31,10 @@ function generateColorRegex(color) {
         ',\\s*' +
         rgbGroup[3] +
         '\\)',
-      'i'
+      'gi'
     );
   }
-  return new RegExp(color, 'i');
+  return new RegExp(color, 'gi');
 }
 
 module.exports = {
