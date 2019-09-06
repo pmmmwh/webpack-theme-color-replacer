@@ -1,9 +1,9 @@
 'use strict';
-var path = require('path'),
-  fs = require('fs');
+
 var crypto = require('crypto');
-var AssetsExtractor = require('./AssetsExtractor');
+var fs = require('fs');
 var { ConcatSource } = require('webpack-sources');
+var AssetsExtractor = require('./AssetsExtractor');
 
 module.exports = class Handler {
   constructor(options) {

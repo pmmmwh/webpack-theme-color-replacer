@@ -1,5 +1,7 @@
-var path = require('path');
+'use strict';
+
 var fs = require('fs');
+var path = require('path');
 var Extractor = require('./Extractor');
 
 /* optimize-chunk-assets 钩子的代码处理 */
@@ -36,10 +38,10 @@ var Extractor = require('./Extractor');
 //css-loader 1:        \n// module\nexports.push([module.i, \"a{   ...... }\\n\", \"\"]);
 //css-loader 2@srcmap:   // Module\nexports.push([module.i, "a{   .....   }\n", "",{"version":3
 
-var Css_Loader_Reg_DEV = /\bn?exports\.push\(\[module\.i, \\?"(.+?\})(?:\\?\\n)?\\?", \\?"\\?"(?:\]\)|,\{)/g;
+var Css_Loader_Reg_DEV = /\bn?exports\.push\(\[module\.i, \\?"(.+?})(?:\\?\\n)?\\?", \\?"\\?"(?:]\)|,{)/g;
 
 //css-loader:  n.exports=t("FZ+f")(!1)).push([n.i,"\n.payment-type[data-v-ffb10066] {......}\n",""])
-var Css_Loader_Reg_UGLY = /\.push\(\[\w+\.i,['"](.+?\})[\\rn]*['"],['"]['"](?:\]\)|,\{)/g;
+var Css_Loader_Reg_UGLY = /\.push\(\[\w+\.i,['"](.+?})[\\rn]*['"],['"]['"](?:]\)|,{)/g;
 
 module.exports = function AssetsExtractor(options) {
   this.extractor = new Extractor(options);

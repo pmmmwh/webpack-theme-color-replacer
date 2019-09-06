@@ -1,4 +1,6 @@
-﻿var idMap = {};
+﻿'use strict';
+
+var idMap = {};
 var theme_COLOR_config;
 
 module.exports = {

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   lighten: lighten, // 淡化
   darken: darken, // 加深
