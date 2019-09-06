@@ -7,16 +7,17 @@ Implementation (Chinese):
 https://segmentfault.com/a/1190000016061608
 
 # 1.Install
+
 npm i -D webpack-theme-color-replacer
 
 # 2.Cofig for webpack
 
-````js
+```js
 
 const ThemeColorReplacer = require('webpack-theme-color-replacer')
 
 module.exports = {
-    .....
+    ...,
     plugins: [
         new ThemeColorReplacer({
             fileName: 'css/theme-colors-[contenthash:8].css', // output css file name, suport [contenthash] and [hash].
@@ -32,16 +33,17 @@ module.exports = {
         })
     ],
 }
-````
+```
 
 You can view this sample:
 https://github.com/hzsrc/vue-element-ui-scaffold-webpack4/blob/master/build/webpack.base.conf.js
 
 # 3.Usage in your web page
+
 Like this:
 
-````js
-import replacer from 'webpack-theme-color-replacer/client'
+```js
+import replacer from 'webpack-theme-color-replacer/client';
 
 // change theme colors at runtime.
 export function changeColor(newColor) {
@@ -50,19 +52,17 @@ export function changeColor(newColor) {
     // changeUrl(cssUrl) {
     //   return `/${cssUrl}`; // while router is not `hash` mode, it needs absolute path
     // },
-  }
+  };
 
   replacer.changer.changeColor(options, Promise).then(() => {
-      console.log('Theme colors changed!')
-  })
+    console.log('Theme colors changed!');
+  });
 }
-
-
-
-````
+```
 
 You can view this sample:
 https://github.com/hzsrc/vue-element-ui-scaffold-webpack4/blob/master/src/js/themeColorClient.js
 
 # issues report
+
 If you have issues with this plugin, please run your command with `--theme_debug` option, such as `npm run dev --theme_debug`, then upload the outputed `_tmp_xxx` files while reporting issues. Thanks!

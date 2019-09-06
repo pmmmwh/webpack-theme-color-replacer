@@ -1,6 +1,6 @@
-var path = require('path')
-var fs = require('fs')
-var Extractor = require('./Extractor')
+var path = require('path');
+var fs = require('fs');
+var Extractor = require('./Extractor');
 
 /* optimize-chunk-assets 钩子的代码处理 */
 // var Css_Code_Prefix = 'exports.push([module.i, "'; // from css-loader:  exports.push([module.i, "
@@ -42,48 +42,50 @@ var Css_Loader_Reg_DEV = /\bn?exports\.push\(\[module\.i, \\?"(.+?\})(?:\\?\\n)?
 var Css_Loader_Reg_UGLY = /\.push\(\[\w+\.i,['"](.+?\})[\\rn]*['"],['"]['"](?:\]\)|,\{)/g;
 
 module.exports = function AssetsExtractor(options) {
-    this.extractor = new Extractor(options)
-    this.extractAssets = function (assets) {
-        var cssSrcs = [];
-        Object.keys(assets).map(fn => {
-            var items = this.extractAsset(fn, assets[fn])
-            cssSrcs = cssSrcs.concat(items)
-        });
-        return cssSrcs;
+  this.extractor = new Extractor(options);
+  this.extractAssets = function(assets) {
+    var cssSrcs = [];
+    Object.keys(assets).map(fn => {
+      var items = this.extractAsset(fn, assets[fn]);
+      cssSrcs = cssSrcs.concat(items);
+    });
+    return cssSrcs;
+  };
+  this.extractAsset = function(fn, asset) {
+    if (fn.match(/\.css$/i)) {
+      var src = assetToStr(asset);
+      writeFileForDebugIf(fn, src, this.extractor);
+      return this.extractor.extractColors(src);
+    } else if (fn.match(/\.js$/i)) {
+      src = assetToStr(asset);
+      writeFileForDebugIf(fn, src, this.extractor);
+      var cssSrcs = [];
+      var CssCodeReg = options.isJsUgly
+        ? Css_Loader_Reg_UGLY
+        : Css_Loader_Reg_DEV;
+      src.replace(CssCodeReg, (match, $1) => {
+        cssSrcs = cssSrcs.concat(this.extractor.extractColors($1));
+      });
+      return cssSrcs;
     }
-    this.extractAsset = function (fn, asset) {
-        if (fn.match(/\.css$/i)) {
-            var src = assetToStr(asset);
-            writeFileForDebugIf(fn, src, this.extractor)
-            return this.extractor.extractColors(src);
-        }
-        else if (fn.match(/\.js$/i)) {
-            src = assetToStr(asset);
-            writeFileForDebugIf(fn, src, this.extractor)
-            var cssSrcs = []
-            var CssCodeReg = options.isJsUgly ? Css_Loader_Reg_UGLY : Css_Loader_Reg_DEV;
-            src.replace(CssCodeReg, (match, $1) => {
-                cssSrcs = cssSrcs.concat(this.extractor.extractColors($1));
-            });
-            return cssSrcs
-        }
 
-        function writeFileForDebugIf(fn, src, extractor) {
-            // `npm run dev --theme_debug` to write asset files for debug
-            try {
-                if (process.env.npm_config_theme_debug) {
-                    if (extractor.testCssCode(src)) {
-                        fs.writeFileSync(path.join(process.cwd(), '_tmp_' + path.basename(fn)), src)
-                    }
-                }
-            } catch (e) {
-            }
+    function writeFileForDebugIf(fn, src, extractor) {
+      // `npm run dev --theme_debug` to write asset files for debug
+      try {
+        if (process.env.npm_config_theme_debug) {
+          if (extractor.testCssCode(src)) {
+            fs.writeFileSync(
+              path.join(process.cwd(), '_tmp_' + path.basename(fn)),
+              src
+            );
+          }
         }
+      } catch (e) {}
     }
+  };
 };
 
 function assetToStr(asset) {
-    var src = asset.source() || '';
-    return src.toString();
+  var src = asset.source() || '';
+  return src.toString();
 }
-
