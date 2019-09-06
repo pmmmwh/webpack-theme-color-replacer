@@ -1,6 +1,6 @@
 {
   "name": "webpack-theme-color-replacer",
-  "version": "1.2.17",
+  "version": "1.2.18",
   "description": "A webpack plugin designed to dynamicly change the theme colors at runtime. 实现运行时快速动态替换主题色的webpack插件. ",
   "main": "src/index.js",
   "scripts": {
@@ -13,8 +13,8 @@
     "css-loader": "^3.0.0",
     "glob": "^7.1.3",
     "prettier": "^1.18.2",
-    "rimraf": "^2.6.3",
-    "webpack": "*"
+    "rimraf": "^3.0.0",
+    "webpack": "^4.0.0"
   },
   "keywords": [
     "webpack",
@@ -24,11 +24,7 @@
     "replacer",
     "runtime"
   ],
-  "author": {
-    "name": "James.Huang",
-    "email": "hz932@qq.com",
-    "url": "http://www.hz300.com/webpack-theme-color-replacer/"
-  },
+  "author": "Michael Mok",
   "license": "MIT",
   "readme": "readme.md",
   "publishConfig": {
